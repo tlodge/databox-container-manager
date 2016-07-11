@@ -57,7 +57,7 @@ export launch = (port, con-man) !->
 
       repositories.for-each (repository) !->
         error, response, body <-! request.post do
-          url: "https://datashop.amar.io/app/get/"
+          url: "http://registry.upintheclouds.org/app/get/"
           form: name: repository
 
         body = JSON.parse body

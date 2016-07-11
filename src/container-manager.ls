@@ -6,7 +6,7 @@ require! {
   \docker-events : DockerEvents
 }
 
-export const registry-url = 'amar.io:5000'
+export const registry-url = 'registry.upintheclouds.org'
 
 var docker
 var docker-emitter
@@ -227,7 +227,7 @@ export launch-container = do ->
       # TODO: Don't hardcode store type
       console.log "Launching passthrough store for #name driver"
       # TODO: Is launching store before driver a security risk (driver hostname getting hijacked)?
-      launch-container 'amar.io:5000/databox-store-passthrough:latest' "#name.store" [ "DRIVER_HOSTNAME=#name" ]
+      launch-container 'registry.upintheclouds.org/databox-store-passthrough:latest' "#name.store" [ "DRIVER_HOSTNAME=#name" ]
         .then callback
 
     if result.error?
