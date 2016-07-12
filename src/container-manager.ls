@@ -176,7 +176,10 @@ export launch-container = do ->
     err, arbiter <-! get-container \/arbiter
     if err? then callback err; return
     err, data <-! arbiter.inspect
-    if err? then callback err; return
+    if err? then \
+
+
+    callback err; return
 
     port = parse-int data.NetworkSettings.Ports['8080/tcp'][0].HostPort
 
@@ -212,6 +215,8 @@ export launch-container = do ->
     err, container <-! docker.create-container do
       name: name
       Image: repo-tag
+      PublishAllPorts: true
+      Links: ["mosquitto:mosquitto"]
       Env: [ "ARBITER_TOKEN=#token" ] ++ env
     if err? then reject err; return
 
@@ -263,7 +268,7 @@ export launch-container = do ->
       if '8080/tcp' not of exposed-ports
         container.remove !-> resolve error: 'Container not launched due to attempting to expose a port other than port 8080.'
         return
-      config.PublishAllPorts = true
+      #config.PublishAllPorts = true
 
     console.log "Starting #name container"
     err, data <-! container.start config
