@@ -72,15 +72,15 @@ export launch = (port, con-man) !->
     ..post '/pull-app' (req, res) !->
       name = req.body.name
       tag  = req.body.tag or \latest
-      console.log "pulling app #name container"
+      console.log "pulling app #name"
       err, stream <-! con-man.get-docker!.pull "#{con-man.registry-url}/#name:#tag"
       stream.pipe res
 
     ..post '/launch-container' (req, res) !->
-      console.log "launching container #req.body.repo-tag"
+      console.log "launching container #{req.body.repo-tag}"
       con-man.launch-container req.body.repo-tag
         .then (info) !->
-          console.log "pulled container #info.name"
+          console.log "pulled container #{info.name}"
           proxy-container info.name, info.port
           info |> JSON.stringify |> res.send
 
