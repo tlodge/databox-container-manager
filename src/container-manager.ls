@@ -200,9 +200,9 @@ export launch-container = do ->
     # Pull to install or for updates first
     console.log "Pulling image from #repo-tag"
     err, stream <-! docker.pull repo-tag
-    if err? then reject err; return
+    if err? then console.log "error pulling!"; console.log err; reject err;  return
     err, output <-! docker.modem.follow-progress stream
-    if err? then reject err; return
+    if err? then console.log "error pulling 2"; console.log err;  reject err; return
     # TODO: Handle potential namespace collisions
     name := name or repo-tag-to-name repo-tag
 
@@ -268,7 +268,6 @@ export launch-container = do ->
       if '8080/tcp' not of exposed-ports
         container.remove !-> resolve error: 'Container not launched due to attempting to expose a port other than port 8080.'
         return
-      #config.PublishAllPorts = true
 
     console.log "Starting #name container"
     err, data <-! container.start config
